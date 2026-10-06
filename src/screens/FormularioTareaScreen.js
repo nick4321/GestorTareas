@@ -1,0 +1,150 @@
+import { useEffect, useRef, useState } from 'react';
+import { View, Text, TextInput, Button, ScrollView, KeyboardAvoidingView, Platform, Alert, StyleSheet } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { usePreventRemove } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSesion } from '../context/SesionContext';
+
+const opcionesRecordatorio = [
+  { etiqueta: 'Sin recordatorio', minutos: null },
+  { etiqueta: '15 Segundos (demo)', minutos: 0.25 },
+  { etiqueta: '2 minutos', minutos: 2 },
+  { etiqueta: '15 minutos', minutos: 15 },
+  { etiqueta: '30 minutos', minutos: 30 },
+  { etiqueta: '1 hora', minutos: 60 },
+  { etiqueta: '2 horas', minutos: 120 },
+  { etiqueta: '6 horas', minutos: 360 },
+  { etiqueta: '12 horas', minutos: 720 },
+  { etiqueta: '1 día', minutos: 1440 },
+  { etiqueta: '2 días', minutos: 2880 },
+  { etiqueta: '1 semana', minutos: 10080 },
+  { etiqueta: '2 semanas', minutos: 20160 },
+];
+
+export default function FormularioTareaScreen({ navigation, route }) {
+  const { tareas, ocupado: guardando, guardarTarea: guardarEnSesion } = useSesion();
+  const tareaId = route.params?.tareaId;
+  const tareaEnEdicion = tareas.find((tarea) => tarea.id === tareaId);
+  const [titulo, setTitulo] = useState(tareaEnEdicion?.titulo ?? '');
+  const [recordatorioMinutos, setRecordatorioMinutos] = useState(tareaEnEdicion?.recordatorioMinutos ?? null);
+  const [terminada, setTerminada] = useState(false);
+  const bloqueo = useRef(false);
+
+  usePreventRemove(guardando && !terminada, () => {
+    Alert.alert('Guardando tarea', 'Esperá a que termine el guardado.');
+  });
+
+  useEffect(() => {
+    if (terminada) navigation.goBack();
+  }, [terminada, navigation]);
+
+  async function guardarTarea() {
+    if (guardando || bloqueo.current) return;
+    if (tareaId && !tareaEnEdicion) {
+      Alert.alert('Tarea inexistente', 'Volvé al listado e intentá nuevamente.');
+      return;
+    }
+
+    const tituloLimpio = titulo.trim();
+
+    if (!tituloLimpio) {
+      Alert.alert('Falta el título', 'Ingresá un título para la tarea.');
+      return;
+    }
+
+    const opcion = opcionesRecordatorio.find(
+      (item) => item.minutos === recordatorioMinutos
+    );
+
+    if (!opcion) {
+      Alert.alert('Recordatorio inválido', 'Seleccioná una opción de la lista.');
+      return;
+    }
+
+    bloqueo.current = true;
+    try {
+      await guardarEnSesion({
+        id: tareaEnEdicion?.id,
+        titulo: tituloLimpio,
+        minutos: recordatorioMinutos,
+        etiqueta: opcion.etiqueta,
+      });
+      setTerminada(true);
+    } catch (error) {
+      Alert.alert('No se pudo guardar', error.message || 'Intentá nuevamente.');
+    } finally {
+      bloqueo.current = false;
+    }
+  }
+
+  return (
+    <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1 }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
+          <View style={styles.formulario}>
+            <Text style={styles.etiqueta}>Título</Text>
+
+            <TextInput
+              style={styles.input}
+              value={titulo}
+              onChangeText={setTitulo}
+              placeholder="Por ejemplo: estudiar React Native"
+              accessibilityLabel="Título de la tarea"
+              editable={!guardando}
+              autoFocus
+            />
+
+            <Text style={styles.etiqueta}>Recordarme dentro de</Text>
+
+            <View style={styles.selector}>
+              <Picker
+                selectedValue={recordatorioMinutos}
+                onValueChange={setRecordatorioMinutos}
+                mode="dropdown"
+                enabled={!guardando}
+                accessibilityLabel="Tiempo del recordatorio"
+              >
+                {opcionesRecordatorio.map((opcion) => (
+                  <Picker.Item
+                    key={String(opcion.minutos)}
+                    label={opcion.etiqueta}
+                    value={opcion.minutos}
+                  />
+                ))}
+              </Picker>
+            </View>
+
+            <Text style={styles.aclaracion}>
+              Para tareas pendientes, el recordatorio se programa desde
+              el momento en que guardás.
+            </Text>
+
+            <View style={styles.acciones}>
+              <Button
+                title="Cancelar"
+                onPress={() => navigation.goBack()}
+                disabled={guardando}
+              />
+
+              <Button
+                title={guardando ? 'Guardando...' : 'Guardar'}
+                onPress={guardarTarea}
+                disabled={guardando}
+              />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  contenedor: { flexGrow: 1, padding: 20, backgroundColor: '#f2f2f2' },
+  formulario: { backgroundColor: '#fff', borderRadius: 12, padding: 20 },
+  etiqueta: { marginBottom: 6, color: '#333' },
+  input: { borderWidth: 1, borderColor: '#bbb', borderRadius: 6, padding: 12, marginBottom: 16 },
+  selector: { borderWidth: 1, borderColor: '#bbb', borderRadius: 6, marginBottom: 16 },
+  aclaracion: { fontSize: 12, color: '#666', marginBottom: 16 },
+  acciones: { flexDirection: 'row', justifyContent: 'space-between' },
+});

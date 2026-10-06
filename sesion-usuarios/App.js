@@ -1,20 +1,19 @@
-import { Button, Text, Alert } from 'react-native';
+import { Button, Text, View, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import HomeScreen from './src/screens/HomeScreen';
-import FormularioTareaScreen from './src/screens/FormularioTareaScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistroScreen from './src/screens/RegistroScreen';
 import { SesionProvider, useSesion } from './src/context/SesionContext';
 
 const Stack = createNativeStackNavigator();
 
-function PantallaHome(props) {
+function PantallaHome() {
   return (
     <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1 }}>
-      <HomeScreen {...props} />
+      <HomeScreen />
     </SafeAreaView>
   );
 }
@@ -44,14 +43,6 @@ function Navegacion() {
               title: `Hola, ${sesion.usuario}`,
               headerRight: () => <Button title="Salir" onPress={cerrarSesion} disabled={ocupado} />,
             }} />
-            <Stack.Screen
-              name="FormularioTarea"
-              component={FormularioTareaScreen}
-              options={({ route }) => ({
-                title: route.params?.tareaId ? 'Editar tarea' : 'Nueva tarea',
-                gestureEnabled: false,
-              })}
-            />
           </Stack.Group>
         ) : (
           <Stack.Group navigationKey="invitado">
