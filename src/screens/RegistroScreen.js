@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   Alert,
-  StyleSheet,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
@@ -29,7 +28,7 @@ export default function RegistroScreen({ navigation }) {
       Alert.alert(
         'Cuenta creada',
         'Ya podés iniciar sesión con tu usuario.',
-        [{ text: 'Ir al login', onPress: () => navigation.goBack() }],
+        [{ text: 'Iniciar sesión', onPress: () => navigation.goBack() }],
         { cancelable: false }
       );
     } catch (error) {
@@ -44,18 +43,16 @@ export default function RegistroScreen({ navigation }) {
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
           <View style={styles.tarjeta}>
-            <Text style={styles.marca}>TU ESPACIO</Text>
-            <Text style={styles.titulo}>Empezá por acá.</Text>
-            <Text style={styles.subtitulo}>Creá una cuenta para organizar tus tareas.</Text>
+            <Text style={styles.titulo}>Crear cuenta</Text>
             <Text style={styles.etiqueta}>Usuario</Text>
-            <TextInput style={styles.input} placeholder="Elegí un usuario" placeholderTextColor={colores.tenue}
+            <TextInput style={styles.input} placeholderTextColor={colores.tenue}
               selectionColor={colores.coral} accessibilityLabel="Usuario" value={usuario}
               onChangeText={setUsuario} autoCapitalize="none" autoCorrect={false} editable={!registrando} />
             <Text style={styles.etiqueta}>Contraseña</Text>
             <TextInput style={styles.input} placeholder="Mínimo 4 caracteres" placeholderTextColor={colores.tenue}
               selectionColor={colores.coral} accessibilityLabel="Contraseña" value={contraseña}
               onChangeText={setContraseña} secureTextEntry autoCapitalize="none" autoCorrect={false} editable={!registrando} />
-            <BotonAccion title={registrando ? 'Registrando...' : 'Crear mi cuenta'} onPress={registrar} disabled={registrando} />
+            <BotonAccion title={registrando ? 'Registrando...' : 'Crear cuenta'} onPress={registrar} disabled={registrando} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

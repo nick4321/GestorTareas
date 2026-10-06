@@ -9,7 +9,7 @@ import { useSesion } from '../context/SesionContext';
 
 const opcionesRecordatorio = [
   { etiqueta: 'Sin recordatorio', minutos: null },
-  { etiqueta: '15 Segundos (demo)', minutos: 0.25 },
+  { etiqueta: '15 segundos', minutos: 0.25 },
   { etiqueta: '2 minutos', minutos: 2 },
   { etiqueta: '15 minutos', minutos: 15 },
   { etiqueta: '30 minutos', minutos: 30 },
@@ -84,7 +84,6 @@ export default function FormularioTareaScreen({ navigation, route }) {
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
           <View style={styles.formulario}>
-            <Text style={styles.marca}>{tareaId ? 'AJUSTÁ TU PENDIENTE' : 'UN NUEVO PENDIENTE'}</Text>
             <Text style={styles.etiqueta}>Título</Text>
 
             <TextInput
@@ -93,7 +92,6 @@ export default function FormularioTareaScreen({ navigation, route }) {
               selectionColor={colores.coral}
               value={titulo}
               onChangeText={setTitulo}
-              placeholder="Por ejemplo: Regar plantas"
               accessibilityLabel="Título de la tarea"
               editable={!guardando}
               autoFocus
@@ -124,8 +122,7 @@ export default function FormularioTareaScreen({ navigation, route }) {
             </View>
 
             <Text style={styles.aclaracion}>
-              Para tareas pendientes, el recordatorio se programa desde
-              el momento en que guardás.
+              El plazo del recordatorio comienza al guardar la tarea pendiente.
             </Text>
 
             <View style={styles.acciones}>
@@ -152,8 +149,6 @@ export default function FormularioTareaScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   contenedor: { flexGrow: 1, padding: 20, backgroundColor: colores.fondo },
   formulario: { backgroundColor: colores.superficie, borderRadius: 24, padding: 22, borderWidth: 1, borderColor: colores.borde },
-  marca: { color: colores.magenta, fontSize: 11, fontWeight: '700', letterSpacing: 1.5, marginBottom: 12 },
-  subtitulo: { color: colores.secundario, fontSize: 16, lineHeight: 24, marginBottom: 26 },
   etiqueta: { marginBottom: 8, color: colores.secundario, fontWeight: '600' },
   input: { color: colores.texto, backgroundColor: colores.fondo, borderWidth: 1, borderColor: colores.borde, borderRadius: 14, padding: 14, fontSize: 16, marginBottom: 24 },
   selector: { backgroundColor: colores.elevado, borderWidth: 1, borderColor: colores.borde, borderRadius: 14, marginBottom: 16, overflow: 'hidden' },

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Switch, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Switch, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import BotonAccion from '../components/BotonAccion';
@@ -22,14 +22,13 @@ export default function LoginScreen({ navigation }) {
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
           <View style={styles.tarjeta}>
-            <Text style={styles.marca}>GESTOR DE TAREAS</Text>
-            <Text style={styles.titulo}>Hola de nuevo.</Text>
+            <Text style={styles.titulo}>Iniciar sesión</Text>
             <Text style={styles.etiqueta}>Usuario</Text>
-            <TextInput style={styles.input} placeholder="Tu usuario" placeholderTextColor={colores.tenue}
+            <TextInput style={styles.input} placeholderTextColor={colores.tenue}
               selectionColor={colores.coral} accessibilityLabel="Usuario" value={usuario}
               onChangeText={setUsuario} autoCapitalize="none" autoCorrect={false} editable={!ocupado} />
             <Text style={styles.etiqueta}>Contraseña</Text>
-            <TextInput style={styles.input} placeholder="Tu contraseña" placeholderTextColor={colores.tenue}
+            <TextInput style={styles.input} placeholderTextColor={colores.tenue}
               selectionColor={colores.coral} accessibilityLabel="Contraseña" value={contraseña}
               onChangeText={setContraseña} secureTextEntry autoCapitalize="none" autoCorrect={false} editable={!ocupado} />
             <View style={styles.fila}>
