@@ -37,13 +37,5 @@ yarn-error.*
 *.tsbuildinfo
 
 # generated native folders
-/ios
-/android
-
-# local
-node_modules/
-.expo/
-android/local.properties
-android/.gradle/
-android/build/
-android/app/build/
+/ios/
+/android/
