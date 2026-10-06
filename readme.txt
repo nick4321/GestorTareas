@@ -58,3 +58,21 @@ npx expo start --dev-client
 EJECUTAR LAS PRUEBAS
 Desde la carpeta del proyecto:
 npm test
+
+npm run test:coverage
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   97.22 |    96.87 |     100 |   97.05 |
+ components        |     100 |      100 |     100 |     100 |
+  TaskItem.js      |     100 |      100 |     100 |     100 |
+ services          |      96 |    92.85 |     100 |   95.65 |
+  autenticacion.js |      96 |    92.85 |     100 |   95.65 | 11
+ utils             |     100 |      100 |     100 |     100 |
+  validators.js    |     100 |      100 |     100 |     100 |
+-------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 3 passed, 3 total
+Tests:       20 passed, 20 total
+Snapshots:   0 total
+Time:        3.913 s, estimated 13 s
