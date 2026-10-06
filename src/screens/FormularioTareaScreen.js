@@ -85,7 +85,6 @@ export default function FormularioTareaScreen({ navigation, route }) {
         <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
           <View style={styles.formulario}>
             <Text style={styles.marca}>{tareaId ? 'AJUSTÁ TU PENDIENTE' : 'UN NUEVO PENDIENTE'}</Text>
-            <Text style={styles.subtitulo}>Dale un título y elegí tu recordatorio.</Text>
             <Text style={styles.etiqueta}>Título</Text>
 
             <TextInput
@@ -94,7 +93,7 @@ export default function FormularioTareaScreen({ navigation, route }) {
               selectionColor={colores.coral}
               value={titulo}
               onChangeText={setTitulo}
-              placeholder="Por ejemplo: estudiar React Native"
+              placeholder="Por ejemplo: Regar plantas"
               accessibilityLabel="Título de la tarea"
               editable={!guardando}
               autoFocus

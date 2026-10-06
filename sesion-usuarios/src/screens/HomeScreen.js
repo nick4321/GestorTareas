@@ -171,7 +171,7 @@ export default function HomeScreen() {
               style={styles.input}
               value={titulo}
               onChangeText={setTitulo}
-              placeholder="Por ejemplo: estudiar React Native"
+              placeholder="Regar las plantas"
               accessibilityLabel="Título de la tarea"
               editable={!guardando}
               autoFocus

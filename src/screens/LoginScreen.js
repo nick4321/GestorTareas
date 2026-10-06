@@ -24,7 +24,6 @@ export default function LoginScreen({ navigation }) {
           <View style={styles.tarjeta}>
             <Text style={styles.marca}>GESTOR DE TAREAS</Text>
             <Text style={styles.titulo}>Hola de nuevo.</Text>
-            <Text style={styles.subtitulo}>Un lugar para tus pendientes y recordatorios.</Text>
             <Text style={styles.etiqueta}>Usuario</Text>
             <TextInput style={styles.input} placeholder="Tu usuario" placeholderTextColor={colores.tenue}
               selectionColor={colores.coral} accessibilityLabel="Usuario" value={usuario}
