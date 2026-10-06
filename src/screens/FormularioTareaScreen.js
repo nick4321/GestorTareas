@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, KeyboardAvoidingView, Platform, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, ScrollView, KeyboardAvoidingView, Platform, Alert, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { usePreventRemove } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BotonAccion from '../components/BotonAccion';
+import { colores } from '../theme/tema';
 import { useSesion } from '../context/SesionContext';
 
 const opcionesRecordatorio = [
@@ -78,14 +80,18 @@ export default function FormularioTareaScreen({ navigation, route }) {
   }
 
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1 }}>
+    <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1, backgroundColor: colores.fondo }}>
       <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
           <View style={styles.formulario}>
+            <Text style={styles.marca}>{tareaId ? 'AJUSTÁ TU PENDIENTE' : 'UN NUEVO PENDIENTE'}</Text>
+            <Text style={styles.subtitulo}>Dale un título y elegí tu recordatorio.</Text>
             <Text style={styles.etiqueta}>Título</Text>
 
             <TextInput
               style={styles.input}
+              placeholderTextColor={colores.tenue}
+              selectionColor={colores.coral}
               value={titulo}
               onChangeText={setTitulo}
               placeholder="Por ejemplo: estudiar React Native"
@@ -98,6 +104,8 @@ export default function FormularioTareaScreen({ navigation, route }) {
 
             <View style={styles.selector}>
               <Picker
+                style={{ color: colores.texto }}
+                dropdownIconColor={colores.coral}
                 selectedValue={recordatorioMinutos}
                 onValueChange={setRecordatorioMinutos}
                 mode="dropdown"
@@ -109,6 +117,8 @@ export default function FormularioTareaScreen({ navigation, route }) {
                     key={String(opcion.minutos)}
                     label={opcion.etiqueta}
                     value={opcion.minutos}
+                    color={colores.texto}
+                    style={{ backgroundColor: colores.superficie }}
                   />
                 ))}
               </Picker>
@@ -120,17 +130,18 @@ export default function FormularioTareaScreen({ navigation, route }) {
             </Text>
 
             <View style={styles.acciones}>
-              <Button
+              <View style={{ flex: 1 }}><BotonAccion
+                secundario
                 title="Cancelar"
                 onPress={() => navigation.goBack()}
                 disabled={guardando}
-              />
+              /></View>
 
-              <Button
+              <View style={{ flex: 1 }}><BotonAccion
                 title={guardando ? 'Guardando...' : 'Guardar'}
                 onPress={guardarTarea}
                 disabled={guardando}
-              />
+              /></View>
             </View>
           </View>
         </ScrollView>
@@ -140,11 +151,13 @@ export default function FormularioTareaScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  contenedor: { flexGrow: 1, padding: 20, backgroundColor: '#f2f2f2' },
-  formulario: { backgroundColor: '#fff', borderRadius: 12, padding: 20 },
-  etiqueta: { marginBottom: 6, color: '#333' },
-  input: { borderWidth: 1, borderColor: '#bbb', borderRadius: 6, padding: 12, marginBottom: 16 },
-  selector: { borderWidth: 1, borderColor: '#bbb', borderRadius: 6, marginBottom: 16 },
-  aclaracion: { fontSize: 12, color: '#666', marginBottom: 16 },
-  acciones: { flexDirection: 'row', justifyContent: 'space-between' },
+  contenedor: { flexGrow: 1, padding: 20, backgroundColor: colores.fondo },
+  formulario: { backgroundColor: colores.superficie, borderRadius: 24, padding: 22, borderWidth: 1, borderColor: colores.borde },
+  marca: { color: colores.magenta, fontSize: 11, fontWeight: '700', letterSpacing: 1.5, marginBottom: 12 },
+  subtitulo: { color: colores.secundario, fontSize: 16, lineHeight: 24, marginBottom: 26 },
+  etiqueta: { marginBottom: 8, color: colores.secundario, fontWeight: '600' },
+  input: { color: colores.texto, backgroundColor: colores.fondo, borderWidth: 1, borderColor: colores.borde, borderRadius: 14, padding: 14, fontSize: 16, marginBottom: 24 },
+  selector: { backgroundColor: colores.elevado, borderWidth: 1, borderColor: colores.borde, borderRadius: 14, marginBottom: 16, overflow: 'hidden' },
+  aclaracion: { fontSize: 13, color: colores.secundario, lineHeight: 21, marginBottom: 28 },
+  acciones: { flexDirection: 'row', gap: 12 },
 });

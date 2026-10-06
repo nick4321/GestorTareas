@@ -7,13 +7,15 @@ import HomeScreen from './src/screens/HomeScreen';
 import FormularioTareaScreen from './src/screens/FormularioTareaScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistroScreen from './src/screens/RegistroScreen';
+import BotonSalir from './src/components/BotonSalir';
+import { colores } from './src/theme/tema';
 import { SesionProvider, useSesion } from './src/context/SesionContext';
 
 const Stack = createNativeStackNavigator();
 
 function PantallaHome(props) {
   return (
-    <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1 }}>
+    <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1, backgroundColor: colores.fondo }}>
       <HomeScreen {...props} />
     </SafeAreaView>
   );
@@ -28,8 +30,8 @@ function Navegacion() {
 
   if (cargando || errorInicio) {
     return (
-      <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 24 }}>
-        <Text>{cargando ? 'Cargando sesión...' : errorInicio}</Text>
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center', padding: 24, backgroundColor: colores.fondo }}>
+        <Text style={{ color: colores.texto }}>{cargando ? 'Cargando sesión...' : errorInicio}</Text>
         {!cargando && <Button title="Reintentar" onPress={reintentar} />}
       </SafeAreaView>
     );
@@ -37,12 +39,18 @@ function Navegacion() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{
+        headerStyle: { backgroundColor: colores.fondo },
+        headerTintColor: colores.texto,
+        headerTitleStyle: { fontWeight: '600' },
+        headerShadowVisible: false,
+        contentStyle: { backgroundColor: colores.fondo },
+      }}>
         {sesion ? (
           <Stack.Group navigationKey={sesion.usuario}>
             <Stack.Screen name="Home" component={PantallaHome} options={{
               title: `Hola, ${sesion.usuario}`,
-              headerRight: () => <Button title="Salir" onPress={cerrarSesion} disabled={ocupado} />,
+              headerRight: () => <BotonSalir onPress={cerrarSesion} disabled={ocupado} />,
             }} />
             <Stack.Screen
               name="FormularioTarea"
@@ -67,7 +75,7 @@ function Navegacion() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       <SesionProvider><Navegacion /></SesionProvider>
     </SafeAreaProvider>
   );

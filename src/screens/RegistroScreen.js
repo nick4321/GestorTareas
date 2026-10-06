@@ -3,10 +3,13 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Alert,
   StyleSheet,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import BotonAccion from '../components/BotonAccion';
+import { colores, formularioStyles as styles } from '../theme/tema';
 
 import { registrarUsuario } from '../services/autenticacion';
 
@@ -37,60 +40,25 @@ export default function RegistroScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.contenedor}>
-      <Text style={styles.titulo}>Crear cuenta</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Usuario"
-        accessibilityLabel="Usuario"
-        value={usuario}
-        onChangeText={setUsuario}
-        autoCapitalize="none"
-        autoCorrect={false}
-        editable={!registrando}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña (mínimo 4 caracteres)"
-        accessibilityLabel="Contraseña"
-        value={contraseña}
-        onChangeText={setContraseña}
-        secureTextEntry
-        autoCapitalize="none"
-        autoCorrect={false}
-        editable={!registrando}
-      />
-
-      <Button
-        title={registrando ? 'Registrando...' : 'Registrarme'}
-        onPress={registrar}
-        disabled={registrando}
-      />
-    </View>
+    <SafeAreaView edges={['left', 'right', 'bottom']} style={{ flex: 1, backgroundColor: colores.fondo }}>
+      <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <ScrollView contentContainerStyle={styles.contenedor} keyboardShouldPersistTaps="handled">
+          <View style={styles.tarjeta}>
+            <Text style={styles.marca}>TU ESPACIO</Text>
+            <Text style={styles.titulo}>Empezá por acá.</Text>
+            <Text style={styles.subtitulo}>Creá una cuenta para organizar tus tareas.</Text>
+            <Text style={styles.etiqueta}>Usuario</Text>
+            <TextInput style={styles.input} placeholder="Elegí un usuario" placeholderTextColor={colores.tenue}
+              selectionColor={colores.coral} accessibilityLabel="Usuario" value={usuario}
+              onChangeText={setUsuario} autoCapitalize="none" autoCorrect={false} editable={!registrando} />
+            <Text style={styles.etiqueta}>Contraseña</Text>
+            <TextInput style={styles.input} placeholder="Mínimo 4 caracteres" placeholderTextColor={colores.tenue}
+              selectionColor={colores.coral} accessibilityLabel="Contraseña" value={contraseña}
+              onChangeText={setContraseña} secureTextEntry autoCapitalize="none" autoCorrect={false} editable={!registrando} />
+            <BotonAccion title={registrando ? 'Registrando...' : 'Crear mi cuenta'} onPress={registrar} disabled={registrando} />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  contenedor: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 24,
-    backgroundColor: '#f2f2f2',
-  },
-  titulo: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 24,
-  },
-  input: {
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
-  },
-});

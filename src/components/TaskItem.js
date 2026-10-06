@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { colores } from '../theme/tema';
 
 export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
     return (
@@ -30,13 +31,14 @@ export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
 
             </TouchableOpacity>
 
+            <View style={styles.acciones}>
             <TouchableOpacity
                 onPress={() => onEditar(tarea)}
                 accessibilityRole="button"
                 accessibilityLabel={`Editar ${tarea.titulo}`}
                 style={styles.botonEliminar}
             >
-                <Text style={{ color: '#1565c0' }}>Editar</Text>
+                <Text style={{ color: colores.magenta, fontWeight: '600' }}>Editar</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -47,40 +49,45 @@ export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
             >
                 <Text style={styles.textoEliminar}>Eliminar</Text>
             </TouchableOpacity>
+            </View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     contenedor: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 16,
+        alignItems: 'stretch',
+        padding: 18,
+        borderWidth: 1,
+        borderColor: colores.borde,
         marginBottom: 10,
-        backgroundColor: '#ffffff',
-        borderRadius: 8,
+        backgroundColor: colores.superficie,
+        borderRadius: 20,
     },
-    contenido: {
-        flex: 1,
-    },
+    contenido: { minHeight: 44 },
+    acciones: { flexDirection: 'row', justifyContent: 'flex-end', marginTop: 8 },
     titulo: {
         fontSize: 17,
-        color: '#222222',
+        fontWeight: '600',
+        lineHeight: 24,
+        color: colores.texto,
     },
     tituloCompletado: {
         textDecorationLine: 'line-through',
-        color: '#777777',
+        color: colores.tenue,
     },
     recordatorio: {
         marginTop: 6,
         fontSize: 13,
-        color: '#666666',
+        color: colores.secundario,
     },
     botonEliminar: {
+        minHeight: 44,
+        justifyContent: 'center',
         padding: 10,
         marginLeft: 8,
     },
     textoEliminar: {
-        color: '#c62828',
+        color: colores.coral,
     },
 });
