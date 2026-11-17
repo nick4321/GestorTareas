@@ -40,7 +40,6 @@ export async function obtenerUbicacionActual() {
       direccion = [lugar.street, lugar.name, lugar.city].filter(Boolean).join(', ') || null;
     }
   } catch {
-    // Las coordenadas siguen siendo válidas si la dirección no está disponible.
   }
   return { latitude, longitude, direccion };
 }
@@ -74,13 +73,25 @@ export async function crearEventoCalendario(tarea) {
   if (!permiso.granted) permisoRechazado('el calendario');
 
   const calendarios = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
-  const calendario = calendarios.find((item) => item.allowsModifications);
+  const calendario = calendarios
+    .filter((item) => item.allowsModifications && item.isVisible !== false)
+    .sort((a, b) => Number(Boolean(b.isPrimary)) - Number(Boolean(a.isPrimary)))[0]
+    || calendarios.find((item) => item.allowsModifications);
   if (!calendario) throw new Error('No hay un calendario disponible para crear el evento.');
 
   const { inicio, fin } = fechaEvento(tarea);
+  const ubicacion = tarea.ubicacion?.direccion
+    || (tarea.ubicacion ? `${tarea.ubicacion.latitude}, ${tarea.ubicacion.longitude}` : null);
+  const contacto = tarea.contacto?.nombre;
+  const notas = [
+    'Evento creado desde Gestor de Tareas.',
+    contacto ? `Contacto: ${contacto}` : null,
+  ].filter(Boolean).join('\n');
+
   return Calendar.createEventAsync(calendario.id, {
     title: `Tarea: ${tarea.titulo}`,
-    notes: 'Evento creado desde Gestor de Tareas.',
+    notes: notas,
+    location: ubicacion || undefined,
     startDate: inicio,
     endDate: fin,
     timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -89,4 +100,8 @@ export async function crearEventoCalendario(tarea) {
 
 export async function eliminarEventoCalendario(eventoId) {
   if (eventoId) await Calendar.deleteEventAsync(eventoId);
+}
+
+export function abrirEventoCalendario(eventoId) {
+  if (eventoId) Calendar.openEventInCalendar(eventoId);
 }

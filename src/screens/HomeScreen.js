@@ -14,6 +14,7 @@ import { colores } from '../theme/tema';
 
 import TaskItem from '../components/TaskItem';
 import { useTareasStore } from '../store/tareasStore';
+import { abrirEventoCalendario } from '../services/recursosDispositivo';
 
 export default function HomeScreen({ navigation }) {
   const tareas = useTareasStore((state) => state.tareas);
@@ -54,6 +55,14 @@ export default function HomeScreen({ navigation }) {
     if (!guardando) navigation.navigate('FormularioTarea', { tareaId: tarea.id });
   }
 
+  function verEnCalendario(eventoId) {
+    try {
+      abrirEventoCalendario(eventoId);
+    } catch (error) {
+      Alert.alert('No se pudo abrir el calendario', error.message || 'Revisá que tengas una aplicación de calendario instalada.');
+    }
+  }
+
   return (
     <View style={styles.contenedor}>
       <View style={styles.resumenTarjeta}>
@@ -76,7 +85,7 @@ export default function HomeScreen({ navigation }) {
       <View style={{ flex: 1 }} pointerEvents={guardando ? 'none' : 'auto'}>
         <FlatList data={visibles} keyExtractor={(tarea) => tarea.id}
           keyboardShouldPersistTaps="handled" contentContainerStyle={styles.lista}
-          renderItem={({ item }) => <TaskItem tarea={item} onCompletar={cambiarEstado} onEliminar={eliminarTarea} onEditar={abrirEdicion} />}
+          renderItem={({ item }) => <TaskItem tarea={item} onCompletar={cambiarEstado} onEliminar={eliminarTarea} onEditar={abrirEdicion} onAbrirCalendario={verEnCalendario} />}
           ListEmptyComponent={
             <View style={styles.vacio}>
               <Text style={styles.vacioTitulo}>{tareas.length ? 'No hay tareas con esta búsqueda o filtro.' : 'No hay tareas.'}</Text>

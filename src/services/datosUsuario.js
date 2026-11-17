@@ -26,7 +26,6 @@ export async function cargarTareas(usuario) {
     const tareas = leerLista(antiguo).map((tarea) => ({
       ...tarea, recordatorioFecha: null, notificacionId: null,
     }));
-    // Reservamos el dueño primero: un fallo no permite migrar a otra cuenta.
     await AsyncStorage.setItem(CLAVE_DUENO, identificador);
     await AsyncStorage.setItem(clave, JSON.stringify(tareas));
     await AsyncStorage.removeItem(CLAVE_ANTIGUA);

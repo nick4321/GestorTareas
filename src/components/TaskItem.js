@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { colores } from '../theme/tema';
 
-export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
+export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar, onAbrirCalendario }) {
     return (
         <View style={styles.contenedor}>
 
@@ -39,6 +39,17 @@ export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
                 )}
 
             </TouchableOpacity>
+
+            {tarea.eventoCalendarioId && onAbrirCalendario && (
+                <TouchableOpacity
+                    onPress={() => onAbrirCalendario(tarea.eventoCalendarioId)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Abrir calendario para ${tarea.titulo}`}
+                    style={styles.botonCalendario}
+                >
+                    <Text style={styles.textoCalendario}>Ver en calendario</Text>
+                </TouchableOpacity>
+            )}
 
             <View style={styles.acciones}>
             <TouchableOpacity
@@ -93,6 +104,8 @@ const styles = StyleSheet.create({
     imagen: { width: '100%', height: 120, borderRadius: 12, marginTop: 10, backgroundColor: colores.fondo },
     recursos: { marginTop: 8, gap: 3 },
     recurso: { color: colores.secundario, fontSize: 12 },
+    botonCalendario: { alignSelf: 'flex-start', marginTop: 8, paddingVertical: 6 },
+    textoCalendario: { color: colores.magenta, fontSize: 13, fontWeight: '600' },
     botonEliminar: {
         minHeight: 44,
         justifyContent: 'center',

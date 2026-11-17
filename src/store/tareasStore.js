@@ -34,7 +34,13 @@ export const useTareasStore = create((set, get) => ({
     let nuevoEvento = eventoCalendarioId ?? anterior?.eventoCalendarioId ?? null;
 
     try {
-      if (fecha) nuevaNotificacion = await programarEnFecha(titulo, fecha, usuario);
+      if (fecha) {
+        nuevaNotificacion = await programarEnFecha(titulo, fecha, usuario, {
+          ubicacion,
+          contacto,
+          eventoCalendario: Boolean(agendarCalendario || nuevoEvento),
+        });
+      }
       if (agendarCalendario && !nuevoEvento) {
         nuevoEvento = await crearEventoCalendario({ titulo, recordatorioFecha: fecha });
       }

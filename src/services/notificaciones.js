@@ -23,14 +23,14 @@ async function solicitarPermiso() {
   }
 }
 
-export async function programarEnFecha(titulo, fecha, usuario) {
+export async function programarEnFecha(titulo, fecha, usuario, detalles = {}) {
   if (!Number.isFinite(fecha) || fecha <= Date.now()) return null;
   await solicitarPermiso();
-  // El permiso puede demorar: comprobamos la fecha otra vez.
   if (fecha <= Date.now()) return null;
   return Notifications.scheduleNotificationAsync({
     content: {
-      title: '⏰ Tarea pendiente', body: titulo,
+      title: '⏰ Tenés una tarea pendiente',
+      body: construirMensaje(titulo, detalles),
       data: { usuario },
     },
     trigger: {
@@ -39,6 +39,19 @@ export async function programarEnFecha(titulo, fecha, usuario) {
       ...(Platform.OS === 'android' ? { channelId: 'tareas-v2' } : {}),
     },
   });
+}
+
+export function construirMensaje(titulo, detalles = {}) {
+  const partes = [titulo];
+  const direccion = detalles.ubicacion?.direccion;
+  const contacto = detalles.contacto?.nombre;
+
+  if (direccion) partes.push(`en ${direccion}`);
+  if (contacto) partes.push(`con ${contacto}`);
+
+  let mensaje = partes.join(' ');
+  if (detalles.eventoCalendario) mensaje += '. También está agregado a tu calendario.';
+  return mensaje;
 }
 
 export async function cancelarRecordatorio(id) {

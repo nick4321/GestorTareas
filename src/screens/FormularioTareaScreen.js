@@ -146,7 +146,7 @@ export default function FormularioTareaScreen({ navigation, route }) {
               </Picker>
             </View>
 
-            <Text style={styles.etiqueta}>Recursos asociados</Text>
+            <Text style={styles.etiqueta}>Opcionales</Text>
             <View style={styles.recursos}>
               <BotonAccion secundario title={imagenUri ? 'Cambiar foto' : 'Adjuntar foto'} onPress={elegirFoto} disabled={guardando} />
               {imagenUri && <Image source={{ uri: imagenUri }} style={styles.preview} accessibilityLabel="Imagen asociada" />}

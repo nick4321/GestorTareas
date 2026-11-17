@@ -31,7 +31,16 @@ export function SesionProvider({ children }) {
         let notificacionId = null;
         if (!tarea.completada && tarea.recordatorioFecha > Date.now()) {
           try {
-            notificacionId = await programarEnFecha(tarea.titulo, tarea.recordatorioFecha, usuario);
+            notificacionId = await programarEnFecha(
+              tarea.titulo,
+              tarea.recordatorioFecha,
+              usuario,
+              {
+                ubicacion: tarea.ubicacion,
+                contacto: tarea.contacto,
+                eventoCalendario: Boolean(tarea.eventoCalendarioId),
+              },
+            );
           } catch {
             sinPermiso = true;
           }
@@ -56,7 +65,6 @@ export function SesionProvider({ children }) {
         if (typeof guardada.usuario !== 'string' || !guardada.usuario.trim()) {
           throw new Error('La sesión guardada no es válida.');
         }
-        // Confirmamos que la cuenta todavía existe.
         const usuarios = JSON.parse(await AsyncStorage.getItem('@gestorTareas:usuarios') || '[]');
         if (!Array.isArray(usuarios) || !usuarios.some((u) => u.usuario === guardada.usuario)) {
           throw new Error('La cuenta de la sesión guardada no existe.');

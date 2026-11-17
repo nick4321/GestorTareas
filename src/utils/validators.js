@@ -1,5 +1,3 @@
-// Función pura: devuelve [] cuando los datos son válidos.
-// En registro exigimos 4 caracteres; en login validamos los campos.
 export function validateLoginInput(usuario, contraseña, esRegistro = false) {
   const errores = [];
   if (!usuario.trim() || !contraseña.trim()) {

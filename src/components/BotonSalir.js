@@ -1,7 +1,6 @@
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { colores } from '../theme/tema';
 
-// Puerta y flecha hacia la izquierda, dibujadas con componentes nativos.
 export default function BotonSalir({ onPress, disabled }) {
   return (
     <TouchableOpacity onPress={onPress} disabled={disabled}

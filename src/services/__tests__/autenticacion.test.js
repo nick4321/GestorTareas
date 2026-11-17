@@ -1,4 +1,3 @@
-// Mock local como en la práctica: no accede al almacenamiento del emulador.
 jest.mock('@react-native-async-storage/async-storage', () => ({
   getItem: jest.fn(), setItem: jest.fn(), removeItem: jest.fn(),
 }));
