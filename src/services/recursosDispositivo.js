@@ -1,7 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import * as Location from 'expo-location';
 import * as Contacts from 'expo-contacts/legacy';
-import * as Calendar from 'expo-calendar';
+import * as Calendar from 'expo-calendar/legacy';
 
 function permisoRechazado(recurso) {
   throw new Error(`No se concedió permiso para acceder a ${recurso}. Podés habilitarlo desde los ajustes del teléfono.`);
