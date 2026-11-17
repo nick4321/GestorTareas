@@ -2,26 +2,24 @@ import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
 import { validarLogin } from '../services/autenticacion';
-import { CLAVE_SESION, cargarTareas, guardarTareas } from '../services/datosUsuario';
-import { cancelarTodos, cancelarRecordatorio, programarEnFecha } from '../services/notificaciones';
+import { CLAVE_SESION, cargarTareas } from '../services/datosUsuario';
+import { cancelarTodos, programarEnFecha } from '../services/notificaciones';
+import { useTareasStore } from '../store/tareasStore';
 
 const SesionContext = createContext(null);
 export const useSesion = () => useContext(SesionContext);
 
 export function SesionProvider({ children }) {
   const [sesion, setSesion] = useState(null);
-  const [tareas, setTareas] = useState([]);
   const [cargando, setCargando] = useState(true);
-  const [ocupado, setOcupado] = useState(false);
+  const [ocupadoSesion, setOcupadoSesion] = useState(false);
   const [errorInicio, setErrorInicio] = useState(null);
   const bloqueo = useRef(false);
-  const actuales = useRef([]);
-
-  async function publicar(usuario, lista) {
-    await guardarTareas(usuario, lista);
-    actuales.current = lista;
-    setTareas(lista);
-  }
+  const tareas = useTareasStore((state) => state.tareas);
+  const ocupadoTareas = useTareasStore((state) => state.ocupado);
+  const guardarTarea = useTareasStore((state) => state.guardarTarea);
+  const cambiarEstado = useTareasStore((state) => state.cambiarEstado);
+  const eliminarTarea = useTareasStore((state) => state.eliminarTarea);
 
   async function prepararUsuario(usuario) {
     const lista = await cargarTareas(usuario);
@@ -40,7 +38,7 @@ export function SesionProvider({ children }) {
         }
         preparada.push({ ...tarea, notificacionId });
       }
-      await publicar(usuario, preparada);
+      useTareasStore.getState().establecerTareas(usuario, preparada);
     } catch (error) {
       await cancelarTodos().catch(() => {});
       throw error;
@@ -81,9 +79,9 @@ export function SesionProvider({ children }) {
   async function ejecutar(operacion) {
     if (bloqueo.current) throw new Error('Esperá a que termine la operación actual.');
     bloqueo.current = true;
-    setOcupado(true);
+    setOcupadoSesion(true);
     try { return await operacion(); }
-    finally { bloqueo.current = false; setOcupado(false); }
+    finally { bloqueo.current = false; setOcupadoSesion(false); }
   }
 
   function ingresar(usuario, contraseña, mantener) {
@@ -105,67 +103,14 @@ export function SesionProvider({ children }) {
     return ejecutar(async () => {
       await cancelarTodos();
       await AsyncStorage.removeItem(CLAVE_SESION);
-      actuales.current = [];
-      setTareas([]);
+      useTareasStore.getState().limpiar();
       setSesion(null);
     });
   }
 
-  function guardarTarea({ id, titulo, minutos, etiqueta }) {
-    return ejecutar(async () => {
-      if (!sesion) throw new Error('Iniciá sesión para guardar tareas.');
-      const anterior = id ? actuales.current.find((t) => t.id === id) : null;
-      if (id && !anterior) throw new Error('La tarea ya no existe.');
-      const completada = anterior?.completada ?? false;
-      const fecha = !completada && minutos !== null ? Date.now() + minutos * 60000 : null;
-      let nuevaId = null;
-      try {
-        if (fecha) nuevaId = await programarEnFecha(titulo, fecha, sesion.usuario);
-        const nueva = {
-          ...anterior,
-          id: id || `${Date.now()}-${Math.random().toString(36).slice(2)}`,
-          titulo, completada, recordatorioMinutos: minutos,
-          recordatorio: minutos === null ? null : `Dentro de ${etiqueta.replace(' (demo)', '')}`,
-          recordatorioFecha: fecha, notificacionId: nuevaId,
-        };
-        const lista = anterior
-          ? actuales.current.map((t) => t.id === id ? nueva : t)
-          : [...actuales.current, nueva];
-        await publicar(sesion.usuario, lista);
-      } catch (error) {
-        await cancelarRecordatorio(nuevaId).catch(() => {});
-        throw error;
-      }
-      // El dato nuevo ya está guardado: no lo revertimos por un fallo al cancelar el viejo.
-      try { await cancelarRecordatorio(anterior?.notificacionId); }
-      catch { Alert.alert('Recordatorio anterior', 'No se pudo cancelar el aviso anterior. Cerrá sesión y volvé a entrar para sincronizar los avisos.'); }
-    });
-  }
-
-  function cambiarEstado(id) {
-    return ejecutar(async () => {
-      if (!sesion) throw new Error('Iniciá sesión.');
-      const tarea = actuales.current.find((t) => t.id === id);
-      if (!tarea) return;
-      await cancelarRecordatorio(tarea.notificacionId);
-      await publicar(sesion.usuario, actuales.current.map((t) => t.id === id ? {
-        ...t, completada: !t.completada, notificacionId: null, recordatorioFecha: null,
-      } : t));
-    });
-  }
-
-  function eliminarTarea(id) {
-    return ejecutar(async () => {
-      if (!sesion) throw new Error('Iniciá sesión.');
-      const tarea = actuales.current.find((t) => t.id === id);
-      if (!tarea) return;
-      await cancelarRecordatorio(tarea.notificacionId);
-      await publicar(sesion.usuario, actuales.current.filter((t) => t.id !== id));
-    });
-  }
-
   return (
-    <SesionContext.Provider value={{ sesion, tareas, cargando, ocupado, errorInicio,
+    <SesionContext.Provider value={{ sesion, tareas, cargando,
+      ocupado: ocupadoSesion || ocupadoTareas, errorInicio,
       reintentar: iniciar, ingresar, salir, guardarTarea, cambiarEstado, eliminarTarea }}>
       {children}
     </SesionContext.Provider>

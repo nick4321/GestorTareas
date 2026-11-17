@@ -3,7 +3,15 @@
     "name": "GestorTareas",
     "slug": "GestorTareas",
     "plugins": [
-      "expo-notifications"
+      "expo-notifications",
+      ["expo-image-picker", {
+        "photosPermission": "GestorTareas necesita acceder a tus fotos para asociarlas a una tarea.",
+        "cameraPermission": "GestorTareas necesita usar la cámara para asociar una foto a la tarea.",
+        "microphonePermission": false
+      }],
+      ["expo-location", { "locationWhenInUsePermission": "GestorTareas necesita tu ubicación para asociarla a una tarea." }],
+      ["expo-contacts", { "contactsPermission": "GestorTareas necesita acceder a tus contactos para asociar un responsable." }],
+      ["expo-calendar", { "calendarPermission": "GestorTareas necesita acceder a tu calendario para crear eventos." }]
     ],
     "version": "1.0.0",
     "orientation": "portrait",

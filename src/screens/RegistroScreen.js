@@ -4,9 +4,11 @@ import {
   Text,
   TextInput,
   Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import BotonAccion from '../components/BotonAccion';
 import { colores, formularioStyles as styles } from '../theme/tema';
 

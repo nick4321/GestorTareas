@@ -13,11 +13,13 @@ import BotonAccion from '../components/BotonAccion';
 import { colores } from '../theme/tema';
 
 import TaskItem from '../components/TaskItem';
-import { useSesion } from '../context/SesionContext';
+import { useTareasStore } from '../store/tareasStore';
 
 export default function HomeScreen({ navigation }) {
-  const { tareas, ocupado: guardando,
-    cambiarEstado: cambiarEnSesion, eliminarTarea: eliminarEnSesion } = useSesion();
+  const tareas = useTareasStore((state) => state.tareas);
+  const guardando = useTareasStore((state) => state.ocupado);
+  const cambiarEnSesion = useTareasStore((state) => state.cambiarEstado);
+  const eliminarEnSesion = useTareasStore((state) => state.eliminarTarea);
 
   const [busqueda, setBusqueda] = useState('');
   const [filtro, setFiltro] = useState('Todas');

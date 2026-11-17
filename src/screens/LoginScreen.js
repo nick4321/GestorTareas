@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Switch, Alert } from 'react-native';
+import { View, Text, TextInput, Switch, Alert, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import BotonAccion from '../components/BotonAccion';
 import { colores, formularioStyles as styles } from '../theme/tema';
 import { useSesion } from '../context/SesionContext';

@@ -25,7 +25,14 @@ FUNCIONALIDADES REALIZADAS
 - Navegación entre Login, Registro, Home y la pantalla de creación o edición de tareas.
 - Componentes reutilizables y estilos con StyleSheet.
 - Diseño e icono con una paleta de colores inspirada en Gengar.
-- Pruebas automáticas con Jest y React Native Testing Library: 20 tests de validación, autenticación y del componente de tarea.
+- Pruebas automáticas con Jest y React Native Testing Library: validación, autenticación, componente de tarea y store global.
+- Estado global de tareas implementado con Zustand, incluyendo acciones para agregar, actualizar, completar y eliminar.
+- Foto asociada a cada tarea desde la cámara o la galería del dispositivo.
+- Ubicación actual asociada a la tarea, mostrando dirección aproximada o coordenadas.
+- Contacto del dispositivo asociado como responsable de la tarea.
+- Evento vinculado creado en el calendario del dispositivo.
+- Solicitud de permisos al utilizar cámara, galería, ubicación, contactos y calendario, con mensajes si son rechazados.
+- En total se ejecutan 24 pruebas automáticas.
 - Generación de un APK y pruebas en un teléfono Android.
 
 CÓMO USAR LA APLICACIÓN
@@ -37,7 +44,10 @@ CÓMO USAR LA APLICACIÓN
 5. Seleccionar "Agregar tarea", escribir un título y elegir un recordatorio o "Sin recordatorio".
 6. Guardar la tarea. Si Android solicita permiso para las notificaciones, concederlo para recibir los avisos.
 7. Desde el listado, buscar, filtrar, editar, completar o eliminar las tareas.
-8. Utilizar el icono de cierre de sesión para salir de la cuenta.
+8. Al crear o editar una tarea, usar los botones de recursos asociados para agregar una foto, ubicación, contacto o evento de calendario.
+9. Utilizar el icono de cierre de sesión para salir de la cuenta.
+
+La primera vez que se utiliza cada recurso, Android solicita el permiso correspondiente. Si se rechaza, la tarea puede seguir guardándose sin ese recurso.
 
 Los recordatorios pueden aparecer con la aplicación en segundo plano. Al cerrar sesión se cancelan los avisos pendientes de esa cuenta. Las tareas y los usuarios permanecen guardados.
 
@@ -45,10 +55,11 @@ Los datos pertenecen al dispositivo donde se utiliza la aplicación y no se sinc
 
 EJECUTAR EL PROYECTO DESDE EL CÓDIGO
 
-Se necesita Node.js y, para compilar Android, Android Studio con el SDK configurado y Java 17.
+Se necesita Node.js y, para compilar Android, Android Studio con el SDK configurado y Java 17. Las funciones de cámara, ubicación, contactos y calendario requieren una compilación de desarrollo o un APK.
 Desde una terminal ubicada en la carpeta del proyecto:
 
 npm install
+npx expo prebuild --platform android
 npx expo run:android
 
 Si la aplicación de desarrollo ya está instalada, iniciar el servidor con:
@@ -60,19 +71,19 @@ Desde la carpeta del proyecto:
 npm test
 
 npm run test:coverage
+
+Las pruebas actuales son 24, agrupadas en cuatro suites.
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   97.22 |    96.87 |     100 |   97.05 |
- components        |     100 |      100 |     100 |     100 |
-  TaskItem.js      |     100 |      100 |     100 |     100 |
- services          |      96 |    92.85 |     100 |   95.65 |
-  autenticacion.js |      96 |    92.85 |     100 |   95.65 | 11
+All files          |   85.29 |    78.72 |   80.76 |   89.77 |
+ components        |     100 |       60 |     100 |     100 | 32-37
+ services          |      96 |    92.85 |     100 |   95.65 | 11
+ store             |   78.78 |       78 |   68.75 |   85.18 | 16-18,27-28,67-72
  utils             |     100 |      100 |     100 |     100 |
-  validators.js    |     100 |      100 |     100 |     100 |
 -------------------|---------|----------|---------|---------|-------------------
 
-Test Suites: 3 passed, 3 total
-Tests:       20 passed, 20 total
+Test Suites: 4 passed, 4 total
+Tests:       24 passed, 24 total
 Snapshots:   0 total
 Time:        3.913 s, estimated 13 s

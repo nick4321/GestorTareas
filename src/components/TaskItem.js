@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { colores } from '../theme/tema';
 
 export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
@@ -28,6 +28,15 @@ export default function TaskItem({ tarea, onCompletar, onEliminar, onEditar }) {
                 <Text style={styles.recordatorio}>
                     Recordatorio: {tarea.recordatorio || 'Sin recordatorio'}
                 </Text>
+
+                {tarea.imagenUri && <Image source={{ uri: tarea.imagenUri }} style={styles.imagen} accessibilityLabel={`Imagen de ${tarea.titulo}`} />}
+                {(tarea.ubicacion || tarea.contacto || tarea.eventoCalendarioId) && (
+                    <View style={styles.recursos}>
+                        {tarea.ubicacion && <Text style={styles.recurso}>📍 Ubicación asociada</Text>}
+                        {tarea.contacto && <Text style={styles.recurso}>👤 {tarea.contacto.nombre}</Text>}
+                        {tarea.eventoCalendarioId && <Text style={styles.recurso}>📅 Evento agregado</Text>}
+                    </View>
+                )}
 
             </TouchableOpacity>
 
@@ -81,6 +90,9 @@ const styles = StyleSheet.create({
         fontSize: 13,
         color: colores.secundario,
     },
+    imagen: { width: '100%', height: 120, borderRadius: 12, marginTop: 10, backgroundColor: colores.fondo },
+    recursos: { marginTop: 8, gap: 3 },
+    recurso: { color: colores.secundario, fontSize: 12 },
     botonEliminar: {
         minHeight: 44,
         justifyContent: 'center',

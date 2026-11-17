@@ -5,6 +5,7 @@ module.exports = {
     'src/utils/validators.js',
     'src/services/autenticacion.js',
     'src/components/TaskItem.js',
+    'src/store/tareasStore.js',
   ],
   coverageDirectory: 'coverage',
 };
