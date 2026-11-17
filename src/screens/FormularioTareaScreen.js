@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   View, Text, TextInput, ScrollView, KeyboardAvoidingView, Platform,
-  Alert, StyleSheet, Image, Modal, FlatList, TouchableOpacity,
+  Alert, StyleSheet, Image, Modal, FlatList, TouchableOpacity, Switch,
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { usePreventRemove } from '@react-navigation/native';
@@ -13,7 +13,7 @@ import { elegirImagen, obtenerUbicacionActual, obtenerContactos } from '../servi
 
 const opcionesRecordatorio = [
   { etiqueta: 'Sin recordatorio', minutos: null },
-  { etiqueta: '15 segundos', minutos: 0.25 },
+  { etiqueta: '5 segundos', minutos: 5 / 60 },
   { etiqueta: '2 minutos', minutos: 2 },
   { etiqueta: '15 minutos', minutos: 15 },
   { etiqueta: '30 minutos', minutos: 30 },
@@ -152,9 +152,20 @@ export default function FormularioTareaScreen({ navigation, route }) {
               {imagenUri && <Image source={{ uri: imagenUri }} style={styles.preview} accessibilityLabel="Imagen asociada" />}
               <BotonAccion secundario title={ubicacion ? 'Actualizar ubicación' : 'Agregar ubicación'} onPress={tomarUbicacion} disabled={guardando} />
               {ubicacion && <Text style={styles.detalle}>{ubicacion.direccion || `${ubicacion.latitude.toFixed(5)}, ${ubicacion.longitude.toFixed(5)}`}</Text>}
-              <BotonAccion secundario title={contacto ? 'Cambiar contacto' : 'Asociar contacto'} onPress={abrirContactos} disabled={guardando} />
+              <BotonAccion secundario title={contacto ? 'Cambiar contacto' : 'Asociar contacto (opcional)'} onPress={abrirContactos} disabled={guardando} />
               {contacto && <Text style={styles.detalle}>{contacto.nombre}{contacto.telefono ? ` · ${contacto.telefono}` : ''}</Text>}
-              <BotonAccion secundario title={agendarCalendario ? 'Evento preparado' : 'Agregar al calendario'} onPress={() => setAgendarCalendario(true)} disabled={guardando || agendarCalendario} />
+              {contacto && <BotonAccion secundario title="Quitar contacto" onPress={() => setContacto(null)} disabled={guardando} />}
+              <View style={styles.filaSwitch}>
+                <Switch
+                  value={agendarCalendario}
+                  onValueChange={setAgendarCalendario}
+                  disabled={guardando}
+                  trackColor={{ false: colores.borde, true: colores.coral }}
+                  thumbColor={colores.texto}
+                  accessibilityLabel="Desea agregar al calendario"
+                />
+                <Text style={styles.textoSwitch}>¿Deseás agregar al calendario?</Text>
+              </View>
               {agendarCalendario && <Text style={styles.detalle}>Se creará un evento al guardar la tarea.</Text>}
             </View>
 
@@ -199,6 +210,8 @@ const styles = StyleSheet.create({
   recursos: { gap: 10, marginBottom: 18 },
   preview: { width: 120, height: 90, borderRadius: 12, alignSelf: 'center', backgroundColor: colores.fondo },
   detalle: { color: colores.secundario, fontSize: 13, lineHeight: 19 },
+  filaSwitch: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4 },
+  textoSwitch: { color: colores.texto, fontSize: 14, flex: 1 },
   aclaracion: { fontSize: 13, color: colores.secundario, lineHeight: 21, marginBottom: 28 },
   acciones: { flexDirection: 'row', gap: 12 },
   accion: { flex: 1 },

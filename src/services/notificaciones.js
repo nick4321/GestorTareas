@@ -49,9 +49,7 @@ export function construirMensaje(titulo, detalles = {}) {
   if (direccion) partes.push(`en ${direccion}`);
   if (contacto) partes.push(`con ${contacto}`);
 
-  let mensaje = partes.join(' ');
-  if (detalles.eventoCalendario) mensaje += '. También está agregado a tu calendario.';
-  return mensaje;
+  return partes.join(' ');
 }
 
 export async function cancelarRecordatorio(id) {

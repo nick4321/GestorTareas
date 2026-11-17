@@ -38,7 +38,6 @@ export function SesionProvider({ children }) {
               {
                 ubicacion: tarea.ubicacion,
                 contacto: tarea.contacto,
-                eventoCalendario: Boolean(tarea.eventoCalendarioId),
               },
             );
           } catch {

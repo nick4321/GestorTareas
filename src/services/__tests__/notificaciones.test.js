@@ -14,12 +14,11 @@ jest.mock('expo-notifications', () => ({
 import { construirMensaje } from '../notificaciones';
 
 describe('notificaciones', () => {
-  it('describe la tarea con ubicación, contacto y calendario', () => {
+  it('describe la tarea con ubicación y contacto', () => {
     expect(construirMensaje('Reunirte', {
       ubicacion: { direccion: 'Av. Rivadavia 123' },
       contacto: { nombre: 'Katy' },
-      eventoCalendario: true,
-    })).toBe('Reunirte en Av. Rivadavia 123 con Katy. También está agregado a tu calendario.');
+    })).toBe('Reunirte en Av. Rivadavia 123 con Katy');
   });
 
   it('mantiene un mensaje simple cuando no hay recursos asociados', () => {

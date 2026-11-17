@@ -38,11 +38,14 @@ export const useTareasStore = create((set, get) => ({
         nuevaNotificacion = await programarEnFecha(titulo, fecha, usuario, {
           ubicacion,
           contacto,
-          eventoCalendario: Boolean(agendarCalendario || nuevoEvento),
         });
       }
       if (agendarCalendario && !nuevoEvento) {
         nuevoEvento = await crearEventoCalendario({ titulo, recordatorioFecha: fecha });
+      }
+      if (agendarCalendario === false && anterior?.eventoCalendarioId) {
+        await eliminarEventoCalendario(anterior.eventoCalendarioId);
+        nuevoEvento = null;
       }
 
       const nueva = {
@@ -54,9 +57,9 @@ export const useTareasStore = create((set, get) => ({
         recordatorio: minutos === null ? null : `Dentro de ${etiqueta.replace(' (demo)', '')}`,
         recordatorioFecha: fecha,
         notificacionId: nuevaNotificacion,
-        imagenUri: imagenUri ?? anterior?.imagenUri ?? null,
-        ubicacion: ubicacion ?? anterior?.ubicacion ?? null,
-        contacto: contacto ?? anterior?.contacto ?? null,
+        imagenUri: imagenUri === undefined ? anterior?.imagenUri ?? null : imagenUri,
+        ubicacion: ubicacion === undefined ? anterior?.ubicacion ?? null : ubicacion,
+        contacto: contacto === undefined ? anterior?.contacto ?? null : contacto,
         eventoCalendarioId: nuevoEvento,
       };
 

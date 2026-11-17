@@ -60,4 +60,20 @@ describe('tareasStore', () => {
 
     expect(useTareasStore.getState().tareas).toHaveLength(0);
   });
+
+  it('permite quitar el contacto y el evento del calendario', async () => {
+    useTareasStore.setState({ usuario: 'nico', tareas: [{
+      id: '1', titulo: 'Tarea', completada: false,
+      contacto: { id: 'c1', nombre: 'Katy' }, eventoCalendarioId: 'e1',
+    }] });
+
+    await useTareasStore.getState().guardarTarea({
+      id: '1', titulo: 'Tarea', minutos: null, etiqueta: 'Sin recordatorio',
+      contacto: null, agendarCalendario: false,
+    });
+
+    const tarea = useTareasStore.getState().tareas[0];
+    expect(tarea.contacto).toBeNull();
+    expect(tarea.eventoCalendarioId).toBeNull();
+  });
 });

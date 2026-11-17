@@ -55,9 +55,9 @@ export default function HomeScreen({ navigation }) {
     if (!guardando) navigation.navigate('FormularioTarea', { tareaId: tarea.id });
   }
 
-  function verEnCalendario(eventoId) {
+  async function verEnCalendario(eventoId) {
     try {
-      abrirEventoCalendario(eventoId);
+      await abrirEventoCalendario(eventoId);
     } catch (error) {
       Alert.alert('No se pudo abrir el calendario', error.message || 'Revisá que tengas una aplicación de calendario instalada.');
     }

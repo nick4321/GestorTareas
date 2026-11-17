@@ -102,6 +102,9 @@ export async function eliminarEventoCalendario(eventoId) {
   if (eventoId) await Calendar.deleteEventAsync(eventoId);
 }
 
-export function abrirEventoCalendario(eventoId) {
-  if (eventoId) Calendar.openEventInCalendar(eventoId);
+export async function abrirEventoCalendario(eventoId) {
+  if (!eventoId) return;
+  const permiso = await Calendar.requestCalendarPermissionsAsync();
+  if (!permiso.granted) permisoRechazado('el calendario');
+  await Calendar.openEventInCalendarAsync({ id: eventoId });
 }
