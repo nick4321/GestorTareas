@@ -8,7 +8,7 @@ Repositorio Git:
 https://github.com/nick4321/GestorTareas
 
 Video de YouTube - Demo:
-https://youtu.be/VcnQE_FQiC0
+https://youtu.be/_qOXxyCRHRU
 
 FUNCIONALIDADES REALIZADAS
 
@@ -29,10 +29,11 @@ FUNCIONALIDADES REALIZADAS
 - Estado global de tareas implementado con Zustand, incluyendo acciones para agregar, actualizar, completar y eliminar.
 - Foto asociada a cada tarea desde la cámara o la galería del dispositivo.
 - Ubicación actual asociada a la tarea, mostrando dirección aproximada o coordenadas.
-- Contacto del dispositivo asociado como responsable de la tarea.
-- Evento vinculado creado en el calendario del dispositivo.
+- Contacto opcional del dispositivo asociado como responsable de la tarea, con posibilidad de quitarlo.
+- Evento opcional creado en el calendario del dispositivo, con acceso para abrirlo desde la tarea.
 - Solicitud de permisos al utilizar cámara, galería, ubicación, contactos y calendario, con mensajes si son rechazados.
-- En total se ejecutan 24 pruebas automáticas.
+- Recordatorio de prueba configurable a partir de 5 segundos.
+- En total se ejecutan 27 pruebas automáticas.
 - Generación de un APK y pruebas en un teléfono Android.
 
 CÓMO USAR LA APLICACIÓN
@@ -44,10 +45,10 @@ CÓMO USAR LA APLICACIÓN
 5. Seleccionar "Agregar tarea", escribir un título y elegir un recordatorio o "Sin recordatorio".
 6. Guardar la tarea. Si Android solicita permiso para las notificaciones, concederlo para recibir los avisos.
 7. Desde el listado, buscar, filtrar, editar, completar o eliminar las tareas.
-8. Al crear o editar una tarea, usar los botones de recursos asociados para agregar una foto, ubicación, contacto o evento de calendario.
+8. Al crear o editar una tarea, usar la sección "Opcionales" para agregar una foto, ubicación, contacto o evento de calendario.
 9. Utilizar el icono de cierre de sesión para salir de la cuenta.
 
-La primera vez que se utiliza cada recurso, Android solicita el permiso correspondiente. Si se rechaza, la tarea puede seguir guardándose sin ese recurso.
+La primera vez que se utiliza cada recurso, Android solicita el permiso correspondiente. Los recursos son opcionales: si se cancela o rechaza un permiso, la tarea puede seguir guardándose sin ese recurso. Esto no representa una limitación funcional de la aplicación, sino un comportamiento esperado para respetar los permisos y la privacidad del dispositivo. Si se activa el calendario y se rechaza su permiso al guardar, la aplicación informa el motivo y permite volver a intentarlo sin perder la tarea.
 
 Los recordatorios pueden aparecer con la aplicación en segundo plano. Al cerrar sesión se cancelan los avisos pendientes de esa cuenta. Las tareas y los usuarios permanecen guardados.
 
