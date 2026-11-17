@@ -3,12 +3,11 @@ GESTOR DE TAREAS
 Aplicación móvil desarrollada con React Native y Expo para organizar tareas y recibir recordatorios. Los datos se guardan localmente en el dispositivo, sin necesidad de un servidor.
 
 ENLACES
+	Repositorio Git:
+	https://github.com/nick4321/GestorTareas
 
-Repositorio Git:
-https://github.com/nick4321/GestorTareas
-
-Video de YouTube - Demo:
-https://youtu.be/_qOXxyCRHRU
+	Video de YouTube - Demo:
+	https://youtu.be/_qOXxyCRHRU
 
 FUNCIONALIDADES REALIZADAS
 
@@ -88,3 +87,45 @@ Test Suites: 4 passed, 4 total
 Tests:       24 passed, 24 total
 Snapshots:   0 total
 Time:        3.913 s, estimated 13 s
+
+
+PUNTO EXTRA: IA APLICADA AL DESARROLLO
+Durante el desarrollo de esta versión se utilizó ChatGPT como asistente de programación y revisión técnica.
+
+La IA se utilizó para:
+- Analizar los requisitos del parcial.
+- Proponer la integración de cámara, galería, ubicación, contactos y calendario.
+- Generar y refactorizar componentes de React Native.
+- Implementar un store global utilizando Zustand.
+- Incorporar y ampliar pruebas automatizadas con Jest.
+- Diagnosticar errores de Expo, Gradle y permisos del dispositivo.
+- Mejorar las notificaciones y la experiencia de usuario.
+- Revisar y limpiar comentarios y código innecesario.
+Ejemplos de prompts utilizados
+“Este es el repositorio de GestorTareas. Necesito ampliarlo para cumplir los requisitos del Parcial 2 incorporando permisos, cámara, galería, ubicación, contactos, calendario, Zustand y Jest.”
+
+“Agregá a las tareas la posibilidad de adjuntar una foto, guardar la ubicación actual, asociar un contacto y crear un evento en el calendario del dispositivo.”
+
+“Migrá el manejo de tareas a Zustand, incluyendo acciones para agregar, actualizar, completar y eliminar tareas.”
+
+“La notificación debería mostrar el título de la tarea, la ubicación asociada y el contacto relacionado, si existen.”
+
+“El contacto debe ser opcional y el calendario debe poder activarse o desactivarse mediante un Check bajo la leyenda 'Deseás agregar al calendario?'.”
+
+“El botón para abrir el calendario no funciona en Android. Analizá el error y corregí la integración utilizando una API compatible con Expo SDK 57.”
+
+“Revisá el proyecto, dejando el código limpio y eliminá comentarios innecesarios o generados por IA, conservando únicamente los emojis necesarios para la interfaz.”
+
+Comparación entre el código generado y el código final
+La IA se utilizó como apoyo para generar una primera propuesta de código y resolver problemas técnicos. Sin embargo, el código final fue revisado, adaptado e integrado manualmente al proyecto existente.
+
+Durante la integración se realizaron ajustes en:
+- Compatibilidad con Expo SDK 57.
+- Uso de la API legacy de expo-calendar.
+- Manejo de permisos rechazados.
+- Persistencia de tareas mediante AsyncStorage.
+- Integración entre Zustand y el contexto de sesión.
+- Cancelación y actualización de notificaciones y eventos.
+- Diseño visual y textos de la interfaz.
+- Corrección de errores detectados durante las pruebas en un dispositivo Android real.
+El resultado final no corresponde a una copia directa del código generado por la IA, sino a una implementación revisada, probada y adaptada a las necesidades específicas de la aplicación.
